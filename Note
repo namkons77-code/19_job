@@ -1,0 +1,14 @@
+문서 > 작업폴더
+python -m venv .venv (가상환경: 서버 컴퓨터에 필요한 라이브러리만 설치하기 위해)
+.venv\Script\activate (가상환경으로 들어가는 명령어)
+pip list (가상환경에서 설치된 라이버러리 확인하는 방법)
+deactivate (가상환경에서 나오는 명령어)
+
+pip install requests (외부라이브러리(requests) 설치)
+
+crud 
+기능	명칭	역할	HTTP 메서드 (REST API)	SQL 문
+C	Create	데이터 생성/추가	POST	INSERT
+R	Read	데이터 조회/읽기	GET	SELECT
+U	Update	데이터 수정/갱신	PUT / PATCH	UPDATE
+D	Delete	데이터 삭제/제거	DELETE	DELETE
