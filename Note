@@ -12,3 +12,27 @@ C	Create	데이터 생성/추가	POST	INSERT
 R	Read	데이터 조회/읽기	GET	SELECT
 U	Update	데이터 수정/갱신	PUT / PATCH	UPDATE
 D	Delete	데이터 삭제/제거	DELETE	DELETE
+
+
+
+BeautifulSoup
+
+import requests
+from bs4 import BeautifulSoup
+
+# 1. 대상 URL 요청
+url = "https://example.com"
+response = requests.get(url)
+response.raise_for_status()
+
+# 2. BeautifulSoup 객체 생성 (파서 지정: 'html.parser' 또는 'lxml')
+soup = BeautifulSoup(response.text, "lxml")
+
+# 3. 데이터 추출
+# <h1> 태그 텍스트 가져오기
+title = soup.find("h1").get_text()
+print(f"Title: {title}")
+
+# 모든 <a> 태그의 링크(href) 가져오기
+for link in soup.find_all("a"):
+    print(link.get("href"))
