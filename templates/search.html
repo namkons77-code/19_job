@@ -1,14 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
+<html>
+    
 <body>
     
     <h1>{{keyworld }} 잡서치결과 페이지입니다</h1>
-    {{ jobs}}
+
+  
+
+    <table>
+        <thead>
+            <tr>
+                <th>순번</th>
+                <th>회사명</th>
+                <th>공고</th>
+                <th>회사위치</th>
+                <th>상세보기</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            {% for index, job in jobs %}
+    
+            <tr>
+                <td>1</td>
+                <td>{{ job["company"] }}</td>
+                <td>{{ job["title"] }}</td>
+                <td>{{ job["location"] }}</td>
+                <td>{{ job["link"] }}</td>
+                
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
 
 </body>
 </html>
