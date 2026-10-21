@@ -36,3 +36,9 @@ print(f"Title: {title}")
 # 모든 <a> 태그의 링크(href) 가져오기
 for link in soup.find_all("a"):
     print(link.get("href"))
+
+
+    
+
+https://search.incruit.com/list/search.asp?col=all&kw=%C6%C4%C0%CC%BD%E3
+위 url을 참조하여 templats/index.htm 과 search.htm 을 디자인해줘

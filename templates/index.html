@@ -1,16 +1,757 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>인크루트 테크 - 실시간 파이썬 & IT 채용정보 포털</title>
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- FontAwesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <style>
+    :root {
+      --inc-blue: #1E5AE6;
+      --inc-blue-hover: #1646b8;
+      --inc-dark: #1E293B;
+      --inc-gray-bg: #F8FAFC;
+      --inc-border: #E2E8F0;
+      --inc-badge-bg: #EEF4FF;
+    }
+
+    body {
+      background-color: var(--inc-gray-bg);
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      color: #334155;
+      line-height: 1.6;
+    }
+
+    /* 상단 네비게이션 */
+    .inc-navbar {
+      background-color: #ffffff;
+      border-bottom: 1px solid var(--inc-border);
+      padding: 0.85rem 0;
+    }
+    .inc-brand {
+      font-weight: 800;
+      font-size: 1.45rem;
+      color: var(--inc-blue);
+      text-decoration: none;
+      letter-spacing: -0.5px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .inc-brand .tech-badge {
+      background: #111827;
+      color: #fff;
+      font-size: 0.72rem;
+      padding: 3px 7px;
+      border-radius: 6px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+    .nav-link {
+      font-weight: 600;
+      color: #475569;
+      font-size: 0.95rem;
+      padding: 0.5rem 1rem !important;
+      transition: color 0.2s;
+    }
+    .nav-link:hover, .nav-link.active {
+      color: var(--inc-blue);
+    }
+
+    /* 히어로 섹션 */
+    .hero-section {
+      background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 60%, #1E5AE6 100%);
+      color: #ffffff;
+      padding: 4.8rem 0 5.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-section::after {
+      content: "";
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 360px;
+      height: 360px;
+      background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-title {
+      font-weight: 800;
+      font-size: 2.6rem;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: #E2E8F0;
+      margin-bottom: 2.4rem;
+      font-weight: 400;
+    }
+
+    /* 메인 검색바 */
+    .hero-search-box {
+      background: #ffffff;
+      padding: 8px 10px;
+      border-radius: 50px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.25);
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .hero-search-box input {
+      border: none;
+      outline: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: #1E293B;
+      padding-left: 20px;
+    }
+    .hero-search-box input::placeholder {
+      color: #94A3B8;
+      font-size: 1rem;
+      font-weight: 400;
+    }
+    .hero-search-box .btn-search {
+      background-color: var(--inc-blue);
+      color: #fff;
+      font-weight: 700;
+      padding: 12px 34px;
+      border-radius: 40px;
+      font-size: 1.05rem;
+      transition: all 0.2s ease;
+      border: none;
+    }
+    .hero-search-box .btn-search:hover {
+      background-color: var(--inc-blue-hover);
+      transform: scale(1.02);
+    }
+
+    /* 인기 키워드 태그 */
+    .keyword-chips {
+      margin-top: 1.6rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+    }
+    .keyword-chip {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(4px);
+      color: #F1F5F9;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+    .keyword-chip:hover {
+      background: #ffffff;
+      color: var(--inc-blue);
+      transform: translateY(-2px);
+    }
+
+    /* 통계 지표 카드 */
+    .stats-card-container {
+      margin-top: -32px;
+      position: relative;
+      z-index: 10;
+    }
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid var(--inc-border);
+      border-radius: 14px;
+      padding: 1.4rem 1.2rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+    }
+    .stat-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 12px;
+      background: var(--inc-badge-bg);
+      color: var(--inc-blue);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    /* 공고 카드 섹션 */
+    .section-title-wrap {
+      margin-bottom: 2rem;
+    }
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: var(--inc-dark);
+      letter-spacing: -0.5px;
+    }
+    .section-desc {
+      color: #64748B;
+      font-size: 0.95rem;
+    }
+
+    .job-card {
+      background: #ffffff;
+      border: 1px solid var(--inc-border);
+      border-radius: 14px;
+      padding: 1.5rem;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+    .job-card:hover {
+      border-color: #93C5FD;
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px -6px rgba(30, 90, 230, 0.12);
+    }
+    .job-card .company-name {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #475569;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .job-card .job-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0F172A;
+      margin-bottom: 12px;
+      line-height: 1.4;
+      text-decoration: none;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      height: 3.2rem;
+    }
+    .job-card .job-title:hover {
+      color: var(--inc-blue);
+    }
+    .job-specs {
+      font-size: 0.85rem;
+      color: #64748B;
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 12px;
+    }
+    .job-specs span {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .job-tags {
+      margin-bottom: 16px;
+    }
+    .tag-badge {
+      background: #F1F5F9;
+      color: #334155;
+      font-size: 0.76rem;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+    .job-card-footer {
+      border-top: 1px solid #F1F5F9;
+      padding-top: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .deadline-badge {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #DC2626;
+      background: #FEE2E2;
+      padding: 3px 8px;
+      border-radius: 6px;
+    }
+    .btn-apply-sm {
+      background-color: var(--inc-blue);
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 6px 16px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: background-color 0.2s;
+    }
+    .btn-apply-sm:hover {
+      background-color: var(--inc-blue-hover);
+      color: #fff;
+    }
+
+    /* 기술 카테고리 그리드 */
+    .category-box {
+      background: #ffffff;
+      border: 1px solid var(--inc-border);
+      border-radius: 12px;
+      padding: 1.4rem;
+      text-align: center;
+      text-decoration: none;
+      color: #334155;
+      display: block;
+      transition: all 0.2s;
+    }
+    .category-box:hover {
+      border-color: var(--inc-blue);
+      color: var(--inc-blue);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.05);
+    }
+    .category-box i {
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: var(--inc-blue);
+    }
+    .category-box h6 {
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .category-box p {
+      font-size: 0.8rem;
+      color: #64748B;
+      margin-bottom: 0;
+    }
+
+    /* 하단 푸터 */
+    footer {
+      background-color: #111827;
+      color: #94A3B8;
+      padding: 3.5rem 0 2rem;
+      margin-top: 5rem;
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: #CBD5E1;
+      text-decoration: none;
+    }
+    footer a:hover {
+      color: #ffffff;
+    }
+  </style>
 </head>
 <body>
-    <h1>안녕하세요, 잡스크래퍼입니다.</h1>
-    <form action="search">
-        <input type="text" name="keyword"/>
-        <button>검색하기</button>
-    </form>
-    
+
+  <!-- 상단 네비게이션 -->
+  <nav class="navbar navbar-expand-lg inc-navbar sticky-top">
+    <div class="container">
+      <a class="inc-brand" href="/">
+        <i class="fa-solid fa-bolt-lightning"></i>
+        <span>INCRUIT</span>
+        <span class="tech-badge">TECH</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+          <li class="nav-item"><a class="nav-link active" href="/"><i class="fa-solid fa-house me-1"></i> 홈</a></li>
+          <li class="nav-item"><a class="nav-link" href="/search?keyword=파이썬"><i class="fa-solid fa-magnifying-glass me-1"></i> 채용검색</a></li>
+          <li class="nav-item"><a class="nav-link" href="#featured-jobs"><i class="fa-solid fa-fire me-1 text-danger"></i> 추천공고</a></li>
+          <li class="nav-item"><a class="nav-link" href="#tech-categories"><i class="fa-solid fa-layer-group me-1"></i> 기술스택</a></li>
+        </ul>
+        <div class="d-flex align-items-center gap-2">
+          <a href="/search?keyword=파이썬" class="btn btn-outline-primary btn-sm px-3 fw-bold rounded-pill">
+            <i class="fa-brands fa-python me-1"></i> 파이썬 공고 검색
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- 메인 히어로 배너 -->
+  <header class="hero-section text-center">
+    <div class="container">
+      <div class="badge bg-white text-primary fw-bold px-3 py-2 rounded-pill mb-3 shadow-sm">
+        <i class="fa-solid fa-circle-check text-success me-1"></i> 인크루트(Incruit) 실시간 채용 데이터 연동
+      </div>
+      <h1 class="hero-title">실시간 파이썬 & IT 개발자 채용정보</h1>
+      <p class="hero-subtitle">인크루트의 최신 채용 공고를 검색하고, 상세 조건별 필터링과 실시간 스크래핑을 경험하세요.</p>
+
+      <!-- 메인 검색 폼: app.py의 /search 엔드포인트와 연동 (name="keyword") -->
+      <form action="/search" method="get" class="hero-search-box d-flex align-items-center">
+        <i class="fa-solid fa-magnifying-glass text-muted fs-5 ms-3"></i>
+        <input type="text" name="keyword" class="form-control" value="파이썬" placeholder="원하는 기술 스택이나 직무를 검색하세요 (예: 파이썬, 백엔드, AI, FastAPI)" required>
+        <button type="submit" class="btn btn-search">
+          <i class="fa-solid fa-search me-1"></i> 공고 검색
+        </button>
+      </form>
+
+      <!-- 인기 추천 키워드 -->
+      <div class="keyword-chips">
+        <span class="text-white-50 me-2 small align-self-center"><i class="fa-solid fa-arrow-trend-up me-1"></i> 인기 검색어:</span>
+        <a href="/search?keyword=파이썬" class="keyword-chip"><i class="fa-brands fa-python me-1"></i> 파이썬</a>
+        <a href="/search?keyword=백엔드" class="keyword-chip">백엔드 개발자</a>
+        <a href="/search?keyword=AI" class="keyword-chip">AI·빅데이터</a>
+        <a href="/search?keyword=FastAPI" class="keyword-chip">FastAPI</a>
+        <a href="/search?keyword=Django" class="keyword-chip">Django</a>
+        <a href="/search?keyword=데이터엔지니어" class="keyword-chip">데이터 엔지니어</a>
+        <a href="/search?keyword=신입" class="keyword-chip">신입/인턴</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- 실시간 지표 통계 카드 -->
+  <div class="container stats-card-container">
+    <div class="row g-3">
+      <div class="col-md-3 col-6">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-briefcase"></i></div>
+          <div>
+            <div class="text-muted small fw-semibold">수집 채용공고</div>
+            <div class="fs-4 fw-bold text-dark">1,482<span class="fs-6 text-primary fw-normal">건</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-building"></i></div>
+          <div>
+            <div class="text-muted small fw-semibold">파이썬 채용기업</div>
+            <div class="fs-4 fw-bold text-dark">520<span class="fs-6 text-primary fw-normal">개사</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+          <div>
+            <div class="text-muted small fw-semibold">데이터 갱신주기</div>
+            <div class="fs-4 fw-bold text-dark">실시간<span class="fs-6 text-success fw-normal"> LIVE</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="fa-solid fa-file-excel"></i></div>
+          <div>
+            <div class="text-muted small fw-semibold">CSV 엑셀 추출</div>
+            <div class="fs-4 fw-bold text-dark">원클릭<span class="fs-6 text-primary fw-normal"> 지원</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 기술 스택별 분류 섹션 -->
+  <section id="tech-categories" class="container py-5 mt-4">
+    <div class="section-title-wrap text-center">
+      <h2 class="section-title">주요 기술 스택별 공고 탐색</h2>
+      <p class="section-desc">채용 시장에서 가장 인기 있는 파이썬 생태계 기술 스택을 선택하세요.</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-lg-3 col-md-6">
+        <a href="/search?keyword=백엔드" class="category-box">
+          <i class="fa-solid fa-server"></i>
+          <h6>Python Backend</h6>
+          <p>Django, FastAPI, Flask 기반 웹 API 서버 개발</p>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <a href="/search?keyword=AI" class="category-box">
+          <i class="fa-solid fa-brain"></i>
+          <h6>AI & Machine Learning</h6>
+          <p>PyTorch, LLM 파인튜닝, 전산모사, 컴퓨터 비전</p>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <a href="/search?keyword=데이터" class="category-box">
+          <i class="fa-solid fa-database"></i>
+          <h6>Data Engineering</h6>
+          <p>Pandas, Spark, ETL 파이프라인, 데이터 시각화</p>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6">
+        <a href="/search?keyword=크롤링" class="category-box">
+          <i class="fa-solid fa-spider"></i>
+          <h6>Web Scraping & RPA</h6>
+          <p>BeautifulSoup, Selenium, 자동화 및 수집 봇 개발</p>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 실시간 인크루트 파이썬 추천 공고 그리드 -->
+  <section id="featured-jobs" class="container py-4">
+    <div class="d-flex justify-content-between align-items-end section-title-wrap">
+      <div>
+        <h2 class="section-title"><i class="fa-brands fa-python text-primary me-2"></i>실시간 파이썬 추천 공고</h2>
+        <p class="section-desc mb-0">인크루트(Incruit) 검색 결과에서 엄선된 최신 파이썬 포지션입니다.</p>
+      </div>
+      <a href="/search?keyword=파이썬" class="btn btn-outline-primary fw-bold rounded-pill px-3">
+        전체 공고 보기 <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      <!-- 1번 공고: (주)비투넷 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="job-card">
+          <div>
+            <div class="company-name">
+              <span><i class="fa-regular fa-building me-1"></i> (주)비투넷</span>
+              <button class="btn btn-link text-warning p-0" title="관심기업 스크랩"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610200000400&src=etc*search" target="_blank" class="job-title">
+              [SI-강동구-중급.고급] 파이썬. Python / 즉시부터.
+            </a>
+            <div class="job-specs">
+              <span><i class="fa-solid fa-location-dot text-primary"></i> 서울 금천구 외</span>
+              <span><i class="fa-solid fa-user-tie text-secondary"></i> 경력 6년↑</span>
+              <span><i class="fa-solid fa-briefcase text-muted"></i> 프리랜서</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag-badge">웹개발자</span>
+              <span class="tag-badge">응용개발자</span>
+              <span class="tag-badge">AI·빅데이터</span>
+              <span class="tag-badge">Python</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <span class="deadline-badge"><i class="fa-regular fa-clock me-1"></i> ~10.27 (화)</span>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610200000400&src=etc*search" target="_blank" class="btn-apply-sm">바로지원</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2번 공고: (주)피플스카우트 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="job-card">
+          <div>
+            <div class="company-name">
+              <span><i class="fa-regular fa-building me-1"></i> (주)피플스카우트</span>
+              <button class="btn btn-link text-warning p-0" title="관심기업 스크랩"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610080000200&src=etc*search" target="_blank" class="job-title">
+              [항공우주용 첨단소재 개발사] Python 백엔드 개발자 / 대리-과장급
+            </a>
+            <div class="job-specs">
+              <span><i class="fa-solid fa-location-dot text-primary"></i> 서울 강남구</span>
+              <span><i class="fa-solid fa-user-tie text-secondary"></i> 경력 5~11년</span>
+              <span><i class="fa-solid fa-briefcase text-success"></i> 정규직</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag-badge">Python</span>
+              <span class="tag-badge">백엔드</span>
+              <span class="tag-badge">AI·빅데이터</span>
+              <span class="tag-badge">대졸↑</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <span class="badge bg-light text-secondary border"><i class="fa-regular fa-calendar-check me-1"></i> 채용시 마감</span>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610080000200&src=etc*search" target="_blank" class="btn-apply-sm">바로지원</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3번 공고: 주식회사 지엔디비즈 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="job-card">
+          <div>
+            <div class="company-name">
+              <span><i class="fa-regular fa-building me-1"></i> 주식회사 지엔디비즈</span>
+              <button class="btn btn-link text-warning p-0" title="관심기업 스크랩"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610160000439&src=etc*search" target="_blank" class="job-title">
+              스마트공장 MES AI 솔루션 파이썬 개발자 채용
+            </a>
+            <div class="job-specs">
+              <span><i class="fa-solid fa-location-dot text-primary"></i> 경기 성남시 분당구</span>
+              <span><i class="fa-solid fa-user-tie text-secondary"></i> 경력 1년↑</span>
+              <span><i class="fa-solid fa-briefcase text-success"></i> 정규직</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag-badge">스마트공장</span>
+              <span class="tag-badge">MES</span>
+              <span class="tag-badge">AI솔루션</span>
+              <span class="tag-badge">파이썬</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <span class="badge bg-light text-secondary border"><i class="fa-regular fa-calendar-check me-1"></i> 채용시 마감</span>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610160000439&src=etc*search" target="_blank" class="btn-apply-sm">바로지원</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4번 공고: (주)바이오에이아이 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="job-card">
+          <div>
+            <div class="company-name">
+              <span><i class="fa-regular fa-building me-1"></i> (주)바이오에이아이</span>
+              <button class="btn btn-link text-warning p-0" title="관심기업 스크랩"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610150002679&src=etc*search" target="_blank" class="job-title">
+              계산과학 연구원 채용 (DFT·MD 전산모사·Python 자동화) - 이차전지·신소재
+            </a>
+            <div class="job-specs">
+              <span><i class="fa-solid fa-location-dot text-primary"></i> 서울 서초구</span>
+              <span><i class="fa-solid fa-user-tie text-secondary"></i> 경력 3년↑</span>
+              <span><i class="fa-solid fa-briefcase text-success"></i> 정규직</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag-badge">연구개발·R&D</span>
+              <span class="tag-badge">전산모사</span>
+              <span class="tag-badge">Python 자동화</span>
+              <span class="tag-badge">이차전지</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <span class="badge bg-light text-secondary border"><i class="fa-regular fa-calendar-check me-1"></i> 채용시 마감</span>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610150002679&src=etc*search" target="_blank" class="btn-apply-sm">바로지원</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5번 공고: 안진회계법인 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="job-card">
+          <div>
+            <div class="company-name">
+              <span><i class="fa-regular fa-building me-1"></i> 안진회계법인</span>
+              <button class="btn btn-link text-warning p-0" title="관심기업 스크랩"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610120000539&src=etc*search" target="_blank" class="job-title">
+              [딜로이트 안진회계법인] 회계감사부문 AI Asset & Analytics그룹 인턴 채용
+            </a>
+            <div class="job-specs">
+              <span><i class="fa-solid fa-location-dot text-primary"></i> 서울 영등포구</span>
+              <span><i class="fa-solid fa-user-tie text-info"></i> 경력무관</span>
+              <span><i class="fa-solid fa-briefcase text-warning"></i> 인턴</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag-badge">AI·빅데이터</span>
+              <span class="tag-badge">Analytics</span>
+              <span class="tag-badge">DBA</span>
+              <span class="tag-badge">대졸↑</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <span class="deadline-badge"><i class="fa-regular fa-clock me-1"></i> ~11.02 (월)</span>
+            <a href="https://job.incruit.com/jobdb_info/jobpost.asp?job=2610120000539&src=etc*search" target="_blank" class="btn-apply-sm">홈페이지지원</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6번 공고: 알고리즘랩스 -->
+      <div class="col-lg-4 col-md-6">
+        <div class="job-card">
+          <div>
+            <div class="company-name">
+              <span><i class="fa-regular fa-building me-1"></i> (주)알고리즘랩스</span>
+              <button class="btn btn-link text-warning p-0" title="관심기업 스크랩"><i class="fa-regular fa-star"></i></button>
+            </div>
+            <a href="/search?keyword=파이썬" class="job-title">
+              Python 기반 MLOps 및 머신러닝 데이터 파이프라인 개발자 채용
+            </a>
+            <div class="job-specs">
+              <span><i class="fa-solid fa-location-dot text-primary"></i> 서울 강남구 테헤란로</span>
+              <span><i class="fa-solid fa-user-tie text-secondary"></i> 경력 2~5년</span>
+              <span><i class="fa-solid fa-briefcase text-success"></i> 정규직</span>
+            </div>
+            <div class="job-tags">
+              <span class="tag-badge">MLOps</span>
+              <span class="tag-badge">Docker</span>
+              <span class="tag-badge">FastAPI</span>
+              <span class="tag-badge">AWS</span>
+            </div>
+          </div>
+          <div class="job-card-footer">
+            <span class="deadline-badge"><i class="fa-regular fa-clock me-1"></i> D-14</span>
+            <a href="/search?keyword=파이썬" class="btn-apply-sm">바로지원</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 서비스 주요 특징 안내 배너 -->
+  <section class="container py-5 my-3">
+    <div class="p-5 rounded-4 bg-white border shadow-sm">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <span class="text-primary fw-bold small text-uppercase"><i class="fa-solid fa-sparkles me-1"></i> Power of Data Scraping</span>
+          <h3 class="fw-bold text-dark mt-2 mb-3">인크루트 채용 데이터를 자유롭게 크롤링하고 분석하세요</h3>
+          <p class="text-muted mb-4">
+            웹 크롤러 엔진을 통해 실시간으로 인크루트(Incruit) 검색 페이지를 파싱하여 최신 공고명, 회사명, 자격요건, 마감일, 지원 링크를 정형 데이터로 가공합니다.
+          </p>
+          <div class="d-flex gap-3">
+            <a href="/search?keyword=파이썬" class="btn btn-primary fw-bold px-4 py-2 rounded-pill">
+              <i class="fa-solid fa-magnifying-glass me-2"></i>검색 결과 페이지 보기
+            </a>
+          </div>
+        </div>
+        <div class="col-lg-4 text-center mt-4 mt-lg-0">
+          <i class="fa-solid fa-network-wired text-primary opacity-75" style="font-size: 8rem;"></i>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 푸터 -->
+  <footer>
+    <div class="container">
+      <div class="row g-4 mb-4">
+        <div class="col-md-6">
+          <div class="inc-brand text-white mb-3">
+            <i class="fa-solid fa-bolt-lightning text-primary"></i>
+            <span>INCRUIT</span>
+            <span class="tech-badge">TECH</span>
+          </div>
+          <p class="text-white-50 small mb-3">
+            본 서비스는 인크루트(Incruit)의 채용 검색 결과(<a href="https://search.incruit.com/list/search.asp?col=all&kw=%C6%C4%C0%CC%BD%E3" target="_blank" class="text-primary text-decoration-underline">search.incruit.com</a>)를 참조하여 제작된 파이썬 웹 크롤러 & 채용정보 대시보드입니다.
+          </p>
+          <div class="small text-white-50">
+            데이터 출처: Incruit Corporation 채용 검색 크롤링
+          </div>
+        </div>
+        <div class="col-md-3 col-6">
+          <h6 class="text-white fw-bold mb-3">바로가기</h6>
+          <ul class="list-unstyled small d-flex flex-column gap-2">
+            <li><a href="/">홈 (index.html)</a></li>
+            <li><a href="/search?keyword=파이썬">파이썬 채용 검색</a></li>
+            <li><a href="/search?keyword=백엔드">백엔드 채용 검색</a></li>
+            <li><a href="/search?keyword=AI">AI 채용 검색</a></li>
+          </ul>
+        </div>
+        <div class="col-md-3 col-6">
+          <h6 class="text-white fw-bold mb-3">기술 스택</h6>
+          <p class="small text-white-50 mb-1">프레임워크: Flask / BeautifulSoup4</p>
+          <p class="small text-white-50 mb-1">인코딩 호환: EUC-KR & UTF-8</p>
+          <p class="small text-white-50">내보내기: Excel UTF-8 BOM CSV</p>
+        </div>
+      </div>
+      <div class="border-top border-secondary pt-3 text-center small text-white-50">
+        &copy; 2026 Incruit Tech Dashboard. Designed for Python Web Crawling & Recruiting Analytics.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
